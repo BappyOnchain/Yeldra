@@ -1,88 +1,105 @@
-# 🎬 Gopal Bhar Video Auto-Cutter (Termux + ffmpeg)
+# Yeldra
 
-প্রতিটা এপিসোডের ভিডিও থেকে প্রথম ২৫ সেকেন্ড আর শেষের ৫ সেকেন্ড
-স্বয়ংক্রিয়ভাবে বাদ দিয়ে, ফাইনাল ভিডিও Bappy ফোল্ডারে সেভ করার
-জন্য একটা রিইউজেবল স্ক্রিপ্ট।
+<div align="center">
+  <img src="https://i.postimg.cc/nhSSNc9S/IMG-20260702-175620.png" width="80" height="80" />
+  <h1>Yeldra</h1>
+  <p><strong>Professional DeFi Staking Protocol on Ethereum</strong></p>
 
----
+  
 
-## ✅ প্রয়োজনীয়তা
+![Solidity](https://img.shields.io/badge/Solidity-0.8.20-363636?style=flat&logo=solidity)
 
-- Termux অ্যাপ (Android)
-- ffmpeg ইনস্টল করা থাকতে হবে
-- bc (ক্যালকুলেশনের জন্য)
 
-pkg install ffmpeg -y
-pkg install bc -y
-termux-setup-storage
+  
 
----
+![React](https://img.shields.io/badge/React-18-61DAFB?style=flat&logo=react)
 
-## ⚙️ ধাপ ১: একবারের জন্য স্ক্রিপ্ট সেটাপ
 
-নিচের পুরো ব্লকটা Termux-এ কপি-পেস্ট করে Enter চাপো (এটা শুধু একবারই করতে হবে):
+  
 
-cat > ~/cut.sh << 'EOF'
-#!/bin/bash
-cd ~
+![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=flat&logo=vite)
 
-INPUT="input.mp4"
 
-echo "Detecting video duration..."
-DURATION=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$INPUT")
+  
 
-END=$(echo "$DURATION - 5" | bc)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3-06B6D4?style=flat&logo=tailwindcss)
 
-echo "Total duration: $DURATION sec"
-echo "Cutting from 25 sec to $END sec..."
 
-ffmpeg -y -i "$INPUT" -ss 25 -to $END -c copy final.mp4
+  
 
-echo "Saving to gallery (Bappy folder)..."
-OUTNAME="final_$(date +%Y%m%d_%H%M%S).mp4"
-cp final.mp4 ~/storage/shared/Bappy/"$OUTNAME"
+![Network](https://img.shields.io/badge/Network-Sepolia-8B5CF6?style=flat)
 
-echo "Cleaning up temp files..."
-rm -f input.mp4 final.mp4
 
-echo "DONE! Saved to Bappy folder as: $OUTNAME"
-EOF
+  
+
+![License](https://img.shields.io/badge/License-MIT-green?style=flat)
+
+
+</div>
 
 ---
 
-## 🎥 ধাপ ২: প্রতিটা নতুন এপিসোডে যা করবে (মাত্র ২টা কমান্ড)
+## Overview
 
-কমান্ড ১ - ভিডিও ফাইল Termux-এ আনো (ফাইলের নাম বদলে দিও):
+Yeldra is a non-custodial DeFi staking protocol built on Ethereum where users can stake USDC and earn passive rewards over time. The protocol uses the battle-tested **reward-per-token accumulator pattern** (pioneered by Synthetix) for gas-efficient, fair reward distribution regardless of the number of stakers.
 
-cp ~/storage/shared/Bappy/"এপিসোডের নাম.mp4" ~/input.mp4
-
-কমান্ড ২ - কাটার স্ক্রিপ্ট চালাও:
-
-bash ~/cut.sh
+> **Live Demo:** [https://yeldra-sigma.vercel.app](https://yeldra-sigma.vercel.app)
+> **Contract:** `0x9bD14eA64dEA9b130f7978b1D0498cc013427EBB`
+> **Network:** Ethereum Sepolia Testnet
 
 ---
 
-## 🔄 যা অটোমেটিক হবে
+## Features
 
-- ভিডিওর মোট দৈর্ঘ্য বের হবে
-- প্রথম ২৫ সেকেন্ড বাদ যাবে
-- শেষের ৫ সেকেন্ড বাদ যাবে
-- কাটা ভিডিও Bappy ফোল্ডারে নতুন নামে (final_তারিখ_সময়.mp4) সেভ হবে
-- টেম্প ফাইল অটোমেটিক মুছে যাবে
-
-শেষে "DONE! Saved to Bappy folder as: ..." লেখা আসলেই কাজ শেষ।
+- Stake USDC and earn passive rewards instantly
+- Claim rewards anytime — no lock-up period
+- Unstake anytime with full flexibility
+- Live APR calculated directly from the contract
+- Emergency withdraw available even when paused
+- Multi-wallet support via Reown AppKit (MetaMask, Rabby, WalletConnect)
+- Dark / Light theme toggle
+- Fully mobile responsive
 
 ---
 
-## 🧹 এক্সট্রা: Termux-এর অপ্রয়োজনীয় ফাইল ক্লিন করার কমান্ড
+## Tech Stack
 
-যখনই Termux-এর সাইজ বেশি মনে হবে, নিচের লাইনটা রান করো
-(Bappy ফোল্ডারের ভিডিও সেফ থাকবে, শুধু Termux-এর ভিতরের কাজের ফাইল মুছবে):
+| Layer | Technology |
+|-------|-----------|
+| Smart Contract | Solidity 0.8.20 |
+| Frontend | React 18 + Vite 5 |
+| Styling | TailwindCSS 3 |
+| Web3 | ethers.js v6 |
+| Wallet | Reown AppKit |
+| Deployment | Vercel |
+| Network | Ethereum Sepolia Testnet |
 
-rm -f ~/*.mp4 ~/*.txt && apt clean -y && pkg autoclean -y && rm -rf ~/.cache/* && rm -rf $PREFIX/tmp/* && du -sh ~
+---
 
-চেক করো cut.sh স্ক্রিপ্ট এখনো আছে কিনা:
+## Contract Addresses
 
-ls ~/cut.sh
+| | Address |
+|--|---------|
+| Staking Contract | `0x9bD14eA64dEA9b130f7978b1D0498cc013427EBB` |
+| USDC (Sepolia) | `0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238` |
 
-যদি "No such file or directory" দেখায়, ধাপ ১ আবার করে স্ক্রিপ্ট বানাতে হবে।
+---
+
+## Security
+
+- Non-custodial — users always control their funds
+- Reentrancy protection on all state-changing functions
+- Emergency withdraw available even when paused
+- Reward rate safety check prevents over-distribution
+
+---
+
+## Author
+
+Built by [@BappyOnchain](https://twitter.com/BappyOnchain)
+
+---
+
+## License
+
+MIT
